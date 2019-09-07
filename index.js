@@ -7,3 +7,8 @@ function writeCards(namesArray, event) {
   return messages;
 }
 
+function countdown(integer) {
+  while (integer >=0 ) {
+    console.log(integer--);
+  }
+}

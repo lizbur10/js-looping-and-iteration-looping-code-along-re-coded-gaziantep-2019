@@ -1,99 +1,47 @@
 const sinon = require( 'sinon' )
 
 describe( 'index.js', () => {
-  describe( 'printBadges()', () => {
-    let spy;
+  let spy;
 
-    beforeEach( () => {
-      spy = sinon.spy( console, 'log' );
-    } );
+  beforeEach( () => {
+    spy = sinon.spy( console, 'log' );
+  } );
 
-    afterEach( () => {
-      spy.restore();
-    } );
+  afterEach( () => {
+    spy.restore();
+  } );
 
-    it( 'invokes console.log() once for each element in the passed-in array', () => {
-      printBadges( [ 'Lisa', 'Kaitlin', 'Jan' ] );
+  describe( 'writeCards()', () => {
 
-      expect( spy.callCount )
-        .to.eq( 3 );
-    } );
-
-    it( 'prints out a welcome badge for each employee', () => {
-      printBadges( [ 'Joe', 'Gabe' ] );
-
-      expect( spy.calledWithExactly( 'Welcome Joe! You are employee #1.' ) )
-        .to.be
-        .true;
-      expect( spy.calledWithExactly( 'Welcome Gabe! You are employee #2.' ) )
-        .to.be
-        .true;
-    } );
-
-    it( 'returns the passed-in array', () => {
-      const arr = [];
-
-      expect( printBadges( arr ) )
-        .to.eq( arr );
+    it( 'returns an array of thank you messages for each name provided to the function', () => {
+      expect( writeCards( [ 'Lisa', 'Kaitlin', 'Jan' ], 'surprise' ) )
+        .to.deep.eq( [ 'Thank you, Lisa, for the wonderful surprise gift!', 'Thank you, Kaitlin, for the wonderful surprise gift!', 'Thank you, Jan, for the wonderful surprise gift!' ] );
     } );
   } );
 
-  describe( 'tailsNeverFails()', () => {
-    let spy;
-
-    beforeEach( () => {
-      spy = sinon.stub( Math, 'random' );
-    } );
-
+  describe( 'countdown()', () => {
     afterEach( () => {
       spy.restore();
     } );
 
-    it( 'invokes Math.random() to simulate coin flips', () => {
-      spy.returns( 0.2 );
+    it( 'invokes console.log once for each number, counting down from the number provided to zero', () => {
+      countdown( 10 );
+      expect( spy.callCount, "Expected countdown(10) to invoke 11 console.logs" )
+        .to.eq( 11 );
+    } );
 
-      tailsNeverFails();
-
-      expect( spy.calledOnce )
+    it( 'logs each number when counting down, starting from the number provided', () => {
+      countdown( 4 );
+      expect( spy.calledWithExactly( 4 ), "Expected countdown(4) to log 4 first" )
         .to.be.true;
-    } );
-
-    it( 'returns the number of "Tails" flips in a row', () => {
-      spy
-        .onFirstCall()
-        .returns( 0.7 )
-        .onSecondCall()
-        .returns( 0.5 )
-        .onThirdCall()
-        .returns( 0.1 );
-
-      expect( tailsNeverFails() )
-        .to.eq( 'You got 2 tails in a row!' );
-    } );
-
-    it( 'loops indefinitely until a flip results in "Heads"', () => {
-      spy
-        .onCall( 0 )
-        .returns( 0.7 )
-        .onCall( 1 )
-        .returns( 0.6 )
-        .onCall( 2 )
-        .returns( 0.5 )
-        .onCall( 3 )
-        .returns( 0.9 )
-        .onCall( 4 )
-        .returns( 0.8 )
-        .onCall( 5 )
-        .returns( 0.5 )
-        .onCall( 6 )
-        .returns( 0.7 )
-        .onCall( 7 )
-        .returns( 0.6 )
-        .onCall( 8 )
-        .returns( 0.4 );
-
-      expect( tailsNeverFails() )
-        .to.eq( 'You got 8 tails in a row!' );
+      expect( spy.calledWithExactly( 3 ), "Expected countdown(4) to log 3 after 4" )
+        .to.be.true;
+      expect( spy.calledWithExactly( 2 ), "Expected countdown(4) to log 2 after 3" )
+        .to.be.true;
+      expect( spy.calledWithExactly( 1 ), "Expected countdown(4) to log 1 after 2" )
+        .to.be.true;
+      expect( spy.calledWithExactly( 0 ), "Expected countdown(4) to log 0 after 1" )
+        .to.be.true;
     } );
   } );
 } );
